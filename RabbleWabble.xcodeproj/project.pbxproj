@@ -19,7 +19,7 @@
 		A564637C2F329CCB00D7DEE0 /* Exceptions for "RabbleWabble" folder in "RabbleWabble" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = A56463692F329CC900D7DEE0 /* RabbleWabble */;
 		};
@@ -154,7 +154,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DZDWNPN8YP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RabbleWabble/Info.plist;
+				INFOPLIST_FILE = RabbleWabble/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -185,7 +185,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DZDWNPN8YP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RabbleWabble/Info.plist;
+				INFOPLIST_FILE = RabbleWabble/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
