@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A56463832F329D1F00D7DEE0 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A56463822F329D1F00D7DEE0 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		A564636A2F329CC900D7DEE0 /* RabbleWabble.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RabbleWabble.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A56463822F329D1F00D7DEE0 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +50,7 @@
 		A56463612F329CC900D7DEE0 = {
 			isa = PBXGroup;
 			children = (
+				A56463822F329D1F00D7DEE0 /* README.md */,
 				A564636C2F329CC900D7DEE0 /* RabbleWabble */,
 				A564636B2F329CC900D7DEE0 /* Products */,
 			);
@@ -122,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A56463832F329D1F00D7DEE0 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
