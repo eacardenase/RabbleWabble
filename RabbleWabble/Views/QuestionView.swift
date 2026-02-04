@@ -7,9 +7,18 @@
 
 import UIKit
 
+public protocol QuestionViewDelegate: AnyObject {
+
+    func incorrectButtonTapped(_ sender: UIButton)
+    func correctButtonTapped(_ sender: UIButton)
+
+}
+
 public class QuestionView: UIView {
 
     // MARK: - Properties
+
+    weak var delegate: QuestionViewDelegate?
 
     public let answerLabel: UILabel = {
         let label = UILabel()
@@ -47,11 +56,16 @@ public class QuestionView: UIView {
         return label
     }()
 
-    public let incorrectButton: UIButton = {
+    public lazy var incorrectButton: UIButton = {
         let button = UIButton()
 
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(resource: .icCircleX), for: .normal)
+        button.addTarget(
+            self,
+            action: #selector(incorrectButtonTapped),
+            for: .touchUpInside
+        )
 
         return button
     }()
@@ -68,11 +82,16 @@ public class QuestionView: UIView {
         return label
     }()
 
-    public let correctButton: UIButton = {
+    public lazy var correctButton: UIButton = {
         let button = UIButton()
 
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(resource: .icCircleCheck), for: .normal)
+        button.addTarget(
+            self,
+            action: #selector(correctButtonTapped),
+            for: .touchUpInside
+        )
 
         return button
     }()
@@ -190,6 +209,20 @@ extension QuestionView {
                 equalTo: correctButton.centerXAnchor
             ),
         ])
+    }
+
+}
+
+// MARK: - Actions
+
+extension QuestionView {
+
+    @objc func incorrectButtonTapped(_ sender: UIButton) {
+        delegate?.incorrectButtonTapped(sender)
+    }
+
+    @objc func correctButtonTapped(_ sender: UIButton) {
+        delegate?.correctButtonTapped(sender)
     }
 
 }

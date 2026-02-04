@@ -22,6 +22,8 @@ public class QuestionController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        questionView.delegate = self
+
         setupViews()
         showQuestion()
 
@@ -72,6 +74,16 @@ extension QuestionController {
         questionView.hintLabel.isHidden = true
     }
 
+    private func showNextQuestion() {
+        questionIndex += 1
+
+        guard questionIndex < questionGroup.questions.count else {
+            return
+        }
+
+        showQuestion()
+    }
+
 }
 
 // MARK: - Actions
@@ -81,6 +93,28 @@ extension QuestionController {
     @objc func toggleAnswerLabels(_ sender: UIView) {
         questionView.answerLabel.isHidden.toggle()
         questionView.hintLabel.isHidden.toggle()
+    }
+
+}
+
+// MARK: - QuestionViewDelegate
+
+extension QuestionController: QuestionViewDelegate {
+
+    public func incorrectButtonTapped(_ sender: UIButton) {
+        incorrectCount += 1
+
+        questionView.incorrectCountLabel.text = "\(incorrectCount)"
+
+        showNextQuestion()
+    }
+
+    public func correctButtonTapped(_ sender: UIButton) {
+        correctCount += 1
+
+        questionView.correctCountLabel.text = "\(correctCount)"
+
+        showNextQuestion()
     }
 
 }
