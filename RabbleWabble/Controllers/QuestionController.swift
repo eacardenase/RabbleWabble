@@ -12,6 +12,10 @@ public class QuestionController: UIViewController {
     // MARK: - Properties
 
     public let questionView = QuestionView()
+    public let questionGroup = QuestionGroup.basicPhrases()
+    public var questionIndex = 0
+    public var correctCount = 0
+    public var incorrectCount = 0
 
     // MARK: - View Lifecycle
 
@@ -19,6 +23,7 @@ public class QuestionController: UIViewController {
         super.viewDidLoad()
 
         setupViews()
+        showQuestion()
     }
 
 }
@@ -47,6 +52,17 @@ extension QuestionController {
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor
             ),
         ])
+    }
+
+    private func showQuestion() {
+        let question = questionGroup.questions[questionIndex]
+
+        questionView.answerLabel.text = question.answer
+        questionView.promptLabel.text = question.prompt
+        questionView.hintLabel.text = question.hint
+
+        questionView.answerLabel.isHidden = true
+        questionView.hintLabel.isHidden = true
     }
 
 }
