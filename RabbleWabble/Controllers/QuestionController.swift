@@ -24,6 +24,13 @@ public class QuestionController: UIViewController {
 
         setupViews()
         showQuestion()
+
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(toggleAnswerLabels)
+        )
+
+        view.addGestureRecognizer(tapGesture)
     }
 
 }
@@ -63,6 +70,17 @@ extension QuestionController {
 
         questionView.answerLabel.isHidden = true
         questionView.hintLabel.isHidden = true
+    }
+
+}
+
+// MARK: - Actions
+
+extension QuestionController {
+
+    @objc func toggleAnswerLabels(_ sender: UIView) {
+        questionView.answerLabel.isHidden.toggle()
+        questionView.hintLabel.isHidden.toggle()
     }
 
 }
