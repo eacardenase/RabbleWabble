@@ -15,7 +15,6 @@ public class QuestionGroupCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Test"
 
         return label
     }()
@@ -24,7 +23,8 @@ public class QuestionGroupCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "10%"
+        label.text = "0%"
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
         return label
     }()
@@ -53,10 +53,44 @@ extension QuestionGroupCell {
     private func setupViews() {
         backgroundColor = .systemBackground
 
-        //        contentView.addSubview(titleLabel)
-        //        contentView.addSubview(percentageLabel)
-        //
-        //
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(percentageLabel)
+
+        // titleLabel
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: 8
+            ),
+            titleLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 16
+            ),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: percentageLabel.leadingAnchor,
+                constant: 8
+            ),
+            titleLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -8
+            ),
+        ])
+
+        // percentageLabel
+        NSLayoutConstraint.activate([
+            percentageLabel.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: 8
+            ),
+            percentageLabel.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -16
+            ),
+            percentageLabel.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor,
+                constant: -8
+            ),
+        ])
     }
 
 }

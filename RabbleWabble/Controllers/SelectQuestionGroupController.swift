@@ -12,7 +12,6 @@ public class SelectQuestionGroupController: UIViewController {
     // MARK: - Properties
 
     public let questionGroups = QuestionGroup.allGroups()
-    private var selectedQuestionGroup: Question?
 
     internal lazy var tableView: UITableView = {
         let _tableView = UITableView()
@@ -30,8 +29,14 @@ public class SelectQuestionGroupController: UIViewController {
 
     // MARK: - View Lifecycle
 
+    public override func loadView() {
+        self.view = tableView
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
+
+        title = "Select Question Group"
 
         setupViews()
     }
@@ -43,16 +48,6 @@ extension SelectQuestionGroupController {
 
     private func setupViews() {
         view.backgroundColor = .systemBackground
-
-        view.addSubview(tableView)
-
-        // tableView
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
     }
 
 }
@@ -89,5 +84,15 @@ extension SelectQuestionGroupController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension SelectQuestionGroupController: UITableViewDelegate {
+
+    public func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let questionGroup = questionGroups[indexPath.row]
+        let controller = QuestionController(questionGroup: questionGroup)
+
+        navigationController?.pushViewController(controller, animated: true)
+    }
 
 }

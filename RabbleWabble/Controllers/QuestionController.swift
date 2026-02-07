@@ -12,10 +12,23 @@ public class QuestionController: UIViewController {
     // MARK: - Properties
 
     public let questionView = QuestionView()
-    public let questionGroup = QuestionGroup.basicPhrases()
+    public let questionGroup: QuestionGroup
+
     public var questionIndex = 0
     public var correctCount = 0
     public var incorrectCount = 0
+
+    // MARK: - Initializers
+
+    init(questionGroup: QuestionGroup) {
+        self.questionGroup = questionGroup
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Lifecycle
 
