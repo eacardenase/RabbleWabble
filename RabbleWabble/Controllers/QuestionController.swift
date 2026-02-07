@@ -18,12 +18,28 @@ public class QuestionController: UIViewController {
     public var correctCount = 0
     public var incorrectCount = 0
 
+    private lazy var questionIndexItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(
+            title: nil,
+            style: .plain,
+            target: nil,
+            action: nil
+        )
+
+        item.tintColor = .black
+        navigationItem.rightBarButtonItem = item
+
+        return item
+    }()
+
     // MARK: - Initializers
 
     init(questionGroup: QuestionGroup) {
         self.questionGroup = questionGroup
 
         super.init(nibName: nil, bundle: nil)
+
+        navigationItem.title = questionGroup.title
     }
 
     required init?(coder: NSCoder) {
@@ -85,6 +101,9 @@ extension QuestionController {
 
         questionView.answerLabel.isHidden = true
         questionView.hintLabel.isHidden = true
+
+        questionIndexItem.title =
+            "\(questionIndex + 1)/\(questionGroup.questions.count)"
     }
 
     private func showNextQuestion() {
