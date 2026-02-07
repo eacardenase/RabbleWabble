@@ -93,7 +93,30 @@ extension SelectQuestionGroupController: UITableViewDelegate {
         let questionGroup = questionGroups[indexPath.row]
         let controller = QuestionController(questionGroup: questionGroup)
 
+        controller.delegate = self
+
         navigationController?.pushViewController(controller, animated: true)
+    }
+
+}
+
+// MARK: - QuestionControllerDelegate
+
+extension SelectQuestionGroupController: QuestionControllerDelegate {
+
+    public func questionController(
+        _ controller: QuestionController,
+        didCancel questionGroup: QuestionGroup,
+        at questionIndex: Int
+    ) {
+        navigationController?.popToViewController(self, animated: true)
+    }
+
+    public func questionController(
+        _ controller: QuestionController,
+        didComplete questionGroup: QuestionGroup
+    ) {
+        navigationController?.popToViewController(self, animated: true)
     }
 
 }

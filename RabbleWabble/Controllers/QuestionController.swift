@@ -7,9 +7,26 @@
 
 import UIKit
 
+public protocol QuestionControllerDelegate: AnyObject {
+
+    func questionController(
+        _ controller: QuestionController,
+        didCancel questionGroup: QuestionGroup,
+        at questionIndex: Int
+    )
+
+    func questionController(
+        _ controller: QuestionController,
+        didComplete questionGroup: QuestionGroup
+    )
+
+}
+
 public class QuestionController: UIViewController {
 
     // MARK: - Properties
+
+    public weak var delegate: QuestionControllerDelegate?
 
     public let questionView = QuestionView()
     public let questionGroup: QuestionGroup
@@ -53,6 +70,7 @@ public class QuestionController: UIViewController {
 
         questionView.delegate = self
 
+        setupCancelButton()
         setupViews()
         showQuestion()
 
@@ -69,6 +87,17 @@ public class QuestionController: UIViewController {
 // MARK: - Helpers
 
 extension QuestionController {
+
+    private func setupCancelButton() {
+        let image = UIImage(resource: .icMenu)
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: image,
+            style: .plain,
+            target: self,
+            action: #selector(cancelButtonTapped)
+        )
+    }
 
     private func setupViews() {
         view.backgroundColor = .systemBackground
@@ -110,6 +139,8 @@ extension QuestionController {
         questionIndex += 1
 
         guard questionIndex < questionGroup.questions.count else {
+            delegate?.questionController(self, didComplete: questionGroup)
+
             return
         }
 
@@ -121,6 +152,14 @@ extension QuestionController {
 // MARK: - Actions
 
 extension QuestionController {
+
+    @objc func cancelButtonTapped(_ sender: UIBarButtonItem) {
+        delegate?.questionController(
+            self,
+            didCancel: questionGroup,
+            at: questionIndex
+        )
+    }
 
     @objc func toggleAnswerLabels(_ sender: UIView) {
         questionView.answerLabel.isHidden.toggle()
