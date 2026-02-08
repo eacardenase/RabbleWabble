@@ -11,13 +11,12 @@ public protocol QuestionControllerDelegate: AnyObject {
 
     func questionController(
         _ controller: QuestionController,
-        didCancel questionGroup: QuestionGroup,
-        at questionIndex: Int
+        didCancel questionStraregy: QuestionStrategy
     )
 
     func questionController(
         _ controller: QuestionController,
-        didComplete questionGroup: QuestionGroup
+        didComplete questionStraregy: QuestionStrategy
     )
 
 }
@@ -28,12 +27,8 @@ public class QuestionController: UIViewController {
 
     public weak var delegate: QuestionControllerDelegate?
 
+    public var questionStrategy: QuestionStrategy
     public let questionView = QuestionView()
-    public let questionGroup: QuestionGroup
-
-    public var questionIndex = 0
-    public var correctCount = 0
-    public var incorrectCount = 0
 
     private lazy var questionIndexItem: UIBarButtonItem = {
         let item = UIBarButtonItem(
@@ -51,12 +46,12 @@ public class QuestionController: UIViewController {
 
     // MARK: - Initializers
 
-    init(questionGroup: QuestionGroup) {
-        self.questionGroup = questionGroup
+    init(questionStrategy: QuestionStrategy) {
+        self.questionStrategy = questionStrategy
 
         super.init(nibName: nil, bundle: nil)
 
-        navigationItem.title = questionGroup.title
+        navigationItem.title = questionStrategy.title
     }
 
     required init?(coder: NSCoder) {
@@ -122,7 +117,7 @@ extension QuestionController {
     }
 
     private func showQuestion() {
-        let question = questionGroup.questions[questionIndex]
+        let question = questionStrategy.currentQuestion
 
         questionView.answerLabel.text = question.answer
         questionView.promptLabel.text = question.prompt
@@ -131,15 +126,12 @@ extension QuestionController {
         questionView.answerLabel.isHidden = true
         questionView.hintLabel.isHidden = true
 
-        questionIndexItem.title =
-            "\(questionIndex + 1)/\(questionGroup.questions.count)"
+        questionIndexItem.title = questionStrategy.questionIndexTitle
     }
 
     private func showNextQuestion() {
-        questionIndex += 1
-
-        guard questionIndex < questionGroup.questions.count else {
-            delegate?.questionController(self, didComplete: questionGroup)
+        guard questionStrategy.advanceToNextQuestion() else {
+            delegate?.questionController(self, didComplete: questionStrategy)
 
             return
         }
@@ -154,11 +146,7 @@ extension QuestionController {
 extension QuestionController {
 
     @objc func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        delegate?.questionController(
-            self,
-            didCancel: questionGroup,
-            at: questionIndex
-        )
+        delegate?.questionController(self, didCancel: questionStrategy)
     }
 
     @objc func toggleAnswerLabels(_ sender: UIView) {
@@ -173,17 +161,22 @@ extension QuestionController {
 extension QuestionController: QuestionViewDelegate {
 
     public func incorrectButtonTapped(_ sender: UIButton) {
-        incorrectCount += 1
+        let question = questionStrategy.currentQuestion
 
-        questionView.incorrectCountLabel.text = "\(incorrectCount)"
+        questionStrategy.markQuestionIncorrect(question)
+
+        questionView.incorrectCountLabel.text =
+            "\(questionStrategy.incorrectCount)"
 
         showNextQuestion()
     }
 
     public func correctButtonTapped(_ sender: UIButton) {
-        correctCount += 1
+        let question = questionStrategy.currentQuestion
 
-        questionView.correctCountLabel.text = "\(correctCount)"
+        questionStrategy.markQuestionCorrect(question)
+
+        questionView.correctCountLabel.text = "\(questionStrategy.correctCount)"
 
         showNextQuestion()
     }
