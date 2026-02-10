@@ -38,6 +38,7 @@ public class SelectQuestionGroupController: UIViewController {
 
         title = "Select Question Group"
 
+        setupSettingsButton()
         setupViews()
     }
 
@@ -46,6 +47,18 @@ public class SelectQuestionGroupController: UIViewController {
 // MARK: - Helpers
 
 extension SelectQuestionGroupController {
+
+    private func setupSettingsButton() {
+        let image = UIImage(resource: .icSettings)
+
+        navigationItem.leftBarButtonItem =
+            UIBarButtonItem(
+                image: image,
+                style: .plain,
+                target: self,
+                action: #selector(settingsButtonTapped)
+            )
+    }
 
     private func setupViews() {
         view.backgroundColor = .systemBackground
@@ -91,11 +104,11 @@ extension SelectQuestionGroupController: UITableViewDelegate {
         didSelectRowAt indexPath: IndexPath
     ) {
         let questionGroup = questionGroups[indexPath.row]
-        let randomStrategy = RandomQuestionStrategy(
-            questionGroup: questionGroup
+        let questionStrategy = AppSettings.shared.questionStrategy(
+            for: questionGroup
         )
-        let controller = QuestionController(questionStrategy: randomStrategy)
 
+        let controller = QuestionController(questionStrategy: questionStrategy)
         controller.delegate = self
 
         navigationController?.pushViewController(controller, animated: true)
@@ -119,6 +132,18 @@ extension SelectQuestionGroupController: QuestionControllerDelegate {
         didComplete questionStrategy: QuestionStrategy
     ) {
         navigationController?.popToViewController(self, animated: true)
+    }
+
+}
+
+// MARK: - Actions
+
+extension SelectQuestionGroupController {
+
+    @objc public func settingsButtonTapped(_ sender: UIBarButtonItem) {
+        let viewController = AppSettingsController()
+
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
 }
