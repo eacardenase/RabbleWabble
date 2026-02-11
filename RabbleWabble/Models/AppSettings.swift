@@ -12,12 +12,16 @@ public enum QuestionStrategyType: Int, CaseIterable {
     case random
     case sequential
 
+    // MARK: - Properties
+
     public var title: String {
         switch self {
         case .random: return "Random"
         case .sequential: return "Sequential"
         }
     }
+
+    // MARK: - Instance Methods
 
     public func questionStrategy(
         for questionGroup: QuestionGroup
@@ -34,21 +38,17 @@ public enum QuestionStrategyType: Int, CaseIterable {
 
 public class AppSettings {
 
-    // MARK: - Keys
-
-    private struct Keys {
-        static let questionStrategy = "questionStrategy"
-    }
-
     // MARK: - Properties
 
     public static let shared = AppSettings()
 
     public var questionStrategyType: QuestionStrategyType {
         get {
+            print(String(describing: QuestionStrategyType.self))
+
             guard
                 let rawValue = UserDefaults.standard.object(
-                    forKey: Keys.questionStrategy
+                    forKey: String(describing: QuestionStrategyType.self)
                 ) as? Int
             else {
                 return .sequential
@@ -59,14 +59,16 @@ public class AppSettings {
         set {
             UserDefaults.standard.setValue(
                 newValue.rawValue,
-                forKey: Keys.questionStrategy
+                forKey: String(describing: QuestionStrategyType.self)
             )
         }
     }
 
-    // MARK: - Initializers
+    // MARK: - Object Lifecycle
 
     private init() {}
+
+    // MARK: - Instance Methods
 
     public func questionStrategy(
         for questionGroup: QuestionGroup
