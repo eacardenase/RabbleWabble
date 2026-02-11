@@ -38,7 +38,6 @@ public class SelectQuestionGroupController: UIViewController {
 
         title = "Select Question Group"
 
-        setupSettingsButton()
         setupViews()
     }
 
@@ -62,6 +61,8 @@ extension SelectQuestionGroupController {
 
     private func setupViews() {
         view.backgroundColor = .systemBackground
+
+        setupSettingsButton()
     }
 
 }

@@ -60,7 +60,7 @@ extension QuestionGroupCell {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(
                 equalTo: contentView.topAnchor,
-                constant: 8
+                constant: 16
             ),
             titleLabel.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
@@ -72,7 +72,7 @@ extension QuestionGroupCell {
             ),
             titleLabel.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,
-                constant: -8
+                constant: -16
             ),
         ])
 
@@ -80,7 +80,7 @@ extension QuestionGroupCell {
         NSLayoutConstraint.activate([
             percentageLabel.topAnchor.constraint(
                 equalTo: contentView.topAnchor,
-                constant: 8
+                constant: 16
             ),
             percentageLabel.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
@@ -88,7 +88,7 @@ extension QuestionGroupCell {
             ),
             percentageLabel.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,
-                constant: -8
+                constant: -16
             ),
         ])
     }

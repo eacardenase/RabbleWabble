@@ -44,8 +44,6 @@ public class AppSettings {
 
     public var questionStrategyType: QuestionStrategyType {
         get {
-            print(String(describing: QuestionStrategyType.self))
-
             guard
                 let rawValue = UserDefaults.standard.object(
                     forKey: String(describing: QuestionStrategyType.self)

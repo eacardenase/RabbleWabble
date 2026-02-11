@@ -50,7 +50,10 @@ extension AppSettingsController {
 
         let questionStrategyType = QuestionStrategyType.allCases[indexPath.row]
 
-        cell.textLabel?.text = questionStrategyType.title
+        var cellConfiguration = UIListContentConfiguration.cell()
+        cellConfiguration.text = questionStrategyType.title
+
+        cell.contentConfiguration = cellConfiguration
 
         if appSettings.questionStrategyType == questionStrategyType {
             cell.accessoryType = .checkmark
