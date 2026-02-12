@@ -24,13 +24,17 @@ public enum QuestionStrategyType: Int, CaseIterable {
     // MARK: - Instance Methods
 
     public func questionStrategy(
-        for questionGroup: QuestionGroup
+        for questionGroupCaretaker: QuestionGroupCaretaker
     ) -> QuestionStrategy {
         switch self {
         case .random:
-            return RandomQuestionStrategy(questionGroup: questionGroup)
+            return RandomQuestionStrategy(
+                questionGroupCaretaker: questionGroupCaretaker
+            )
         case .sequential:
-            return SequentialQuestionStrategy(questionGroup: questionGroup)
+            return SequentialQuestionStrategy(
+                questionGroupCaretaker: questionGroupCaretaker
+            )
         }
     }
 
@@ -69,9 +73,11 @@ public class AppSettings {
     // MARK: - Instance Methods
 
     public func questionStrategy(
-        for questionGroup: QuestionGroup
+        for questionGroupCaretaker: QuestionGroupCaretaker
     ) -> QuestionStrategy {
-        return questionStrategyType.questionStrategy(for: questionGroup)
+        return questionStrategyType.questionStrategy(
+            for: questionGroupCaretaker
+        )
     }
 
 }
