@@ -12,8 +12,6 @@ public class QuestionGroup: Codable {
     public class Score: Codable {
         public var correctCount = 0
         public var incorrectCount = 0
-
-        public init() {}
     }
 
     // MARK: - Properties
@@ -24,7 +22,7 @@ public class QuestionGroup: Codable {
 
     // MARK: - Object Lifecycle
 
-    public init(questions: [Question], score: Score = Score(), title: String) {
+    public init(questions: [Question], score: Score, title: String) {
         self.questions = questions
         self.score = score
         self.title = title

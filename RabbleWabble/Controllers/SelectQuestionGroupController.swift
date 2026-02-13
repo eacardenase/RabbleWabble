@@ -16,11 +16,6 @@ public class SelectQuestionGroupController: UIViewController {
         return questionGroupCaretaker.questionGroups
     }
 
-    private var selectedQuestionGroup: QuestionGroup {
-        get { questionGroupCaretaker.selectedQuestionGroup }
-        set { questionGroupCaretaker.selectedQuestionGroup = newValue }
-    }
-
     internal lazy var tableView: UITableView = {
         let _tableView = UITableView()
 
@@ -45,8 +40,6 @@ public class SelectQuestionGroupController: UIViewController {
         super.viewDidLoad()
 
         title = "Select Question Group"
-
-        print(AppSettings.shared.questionStrategyType)
 
         setupViews()
 
@@ -122,18 +115,11 @@ extension SelectQuestionGroupController: UITableViewDelegate {
 
     public func tableView(
         _ tableView: UITableView,
-        willSelectRowAt indexPath: IndexPath
-    ) -> IndexPath? {
-        let questionGroup = questionGroups[indexPath.row]
-        selectedQuestionGroup = questionGroup
-
-        return indexPath
-    }
-
-    public func tableView(
-        _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
+        let questionGroup = questionGroups[indexPath.row]
+        questionGroupCaretaker.selectedQuestionGroup = questionGroup
+
         let questionStrategy = AppSettings.shared.questionStrategy(
             for: questionGroupCaretaker
         )
