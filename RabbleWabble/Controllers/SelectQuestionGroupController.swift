@@ -5,6 +5,7 @@
 //  Created by Edwin Cardenas on 2/5/26.
 //
 
+import Combine
 import UIKit
 
 public class SelectQuestionGroupController: UIViewController {
@@ -42,16 +43,6 @@ public class SelectQuestionGroupController: UIViewController {
         title = "Select Question Group"
 
         setupViews()
-
-        questionGroups.forEach {
-            print(
-                """
-                \($0.title)
-                Correct Count: \($0.score.correctCount)
-                Incorrect Count: \($0.score.incorrectCount)
-                """
-            )
-        }
     }
 
 }
@@ -95,14 +86,24 @@ extension SelectQuestionGroupController: UITableViewDataSource {
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: NSStringFromClass(QuestionGroupCell.self),
-            for: indexPath
-        )
+        guard
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: NSStringFromClass(QuestionGroupCell.self),
+                for: indexPath
+            ) as? QuestionGroupCell
+        else {
+            return UITableViewCell()
+        }
 
         let questionGroup = questionGroups[indexPath.row]
 
-        cell.textLabel?.text = questionGroup.title
+        let publisher = questionGroup.score.$runningPercentage
+        let subscriber = publisher.receive(on: OperationQueue.main)
+            .map { String(format: "%.0f %%", round(100 * $0)) }
+            .assign(to: \.text, on: cell.percentageLabel)
+
+        cell.titleLabel.text = questionGroup.title
+        cell.percentageSubscriber = subscriber
 
         return cell
     }

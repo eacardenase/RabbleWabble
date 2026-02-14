@@ -5,11 +5,14 @@
 //  Created by Edwin Cardenas on 2/5/26.
 //
 
+import Combine
 import UIKit
 
 public class QuestionGroupCell: UITableViewCell {
 
     // MARK: - Properties
+
+    public var percentageSubscriber: AnyCancellable?
 
     public let titleLabel: UILabel = {
         let label = UILabel()
@@ -23,7 +26,6 @@ public class QuestionGroupCell: UITableViewCell {
         let label = UILabel()
 
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "0%"
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
         return label
@@ -47,6 +49,8 @@ public class QuestionGroupCell: UITableViewCell {
     }
 
 }
+
+// MARK: - Helpers
 
 extension QuestionGroupCell {
 
