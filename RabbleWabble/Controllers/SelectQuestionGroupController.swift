@@ -99,7 +99,7 @@ extension SelectQuestionGroupController: UITableViewDataSource {
 
         let publisher = questionGroup.score.$runningPercentage
         let subscriber = publisher.receive(on: OperationQueue.main)
-            .map { String(format: "%.0f %%", round(100 * $0)) }
+            .map { String(format: "%.0f %%", $0) }
             .assign(to: \.text, on: cell.percentageLabel)
 
         cell.titleLabel.text = questionGroup.title

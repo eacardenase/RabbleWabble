@@ -54,7 +54,9 @@ public class QuestionGroup: Codable {
                 return
             }
 
-            runningPercentage = Double(correctCount) / Double(totalCount)
+            let ratio = Double(correctCount) / Double(totalCount)
+
+            runningPercentage = round(100 * ratio)
         }
 
         public func reset() {
