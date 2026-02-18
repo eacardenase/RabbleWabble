@@ -63,10 +63,19 @@ extension SelectQuestionGroupController {
             )
     }
 
+    private func setupAddQuestionGroupButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addQuestionGroupButtonTapped)
+        )
+    }
+
     private func setupViews() {
         view.backgroundColor = .systemBackground
 
         setupSettingsButton()
+        setupAddQuestionGroupButton()
     }
 
 }
@@ -161,6 +170,43 @@ extension SelectQuestionGroupController {
         let viewController = AppSettingsController()
 
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    @objc public func addQuestionGroupButtonTapped(_ sender: UIBarButtonItem) {
+        let viewController = CreateQuestionGroupViewController()
+        viewController.delegate = self
+
+        let navigationController = UINavigationController(
+            rootViewController: viewController
+        )
+
+        present(navigationController, animated: true)
+    }
+
+}
+
+// MARK: - CreateQuestionGroupViewControllerDelegate
+
+extension SelectQuestionGroupController:
+    CreateQuestionGroupViewControllerDelegate
+{
+    public func createQuestionGroupViewControllerDidCancel(
+        _ viewController: CreateQuestionGroupViewController
+    ) {
+        viewController.dismiss(animated: true)
+    }
+
+    public func createQuestionGroupViewController(
+        _ viewController: CreateQuestionGroupViewController,
+        created questionGroup: QuestionGroup
+    ) {
+        questionGroupCaretaker.questionGroups.append(questionGroup)
+
+        try? questionGroupCaretaker.save()
+
+        viewController.dismiss(animated: true)
+
+        tableView.reloadData()
     }
 
 }
