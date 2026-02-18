@@ -25,6 +25,8 @@ public class CreateQuestionGroupViewController: UITableViewController {
 
     public var delegate: CreateQuestionGroupViewControllerDelegate?
 
+    // MARK: - View Lifecycle
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 

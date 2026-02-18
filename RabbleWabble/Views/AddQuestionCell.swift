@@ -28,6 +28,8 @@ public class AddQuestionCell: UITableViewCell {
     ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        selectionStyle = .none
+
         setupViews()
     }
 

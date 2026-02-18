@@ -179,6 +179,7 @@ extension SelectQuestionGroupController {
         let navigationController = UINavigationController(
             rootViewController: viewController
         )
+        navigationController.modalPresentationStyle = .fullScreen
 
         present(navigationController, animated: true)
     }

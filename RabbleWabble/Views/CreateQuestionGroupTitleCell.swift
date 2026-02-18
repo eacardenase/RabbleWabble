@@ -51,6 +51,8 @@ public class CreateQuestionGroupTitleCell: UITableViewCell {
     ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        selectionStyle = .none
+
         setupViews()
     }
 

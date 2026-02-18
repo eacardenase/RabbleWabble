@@ -86,6 +86,8 @@ public class CreateQuestionCell: UITableViewCell {
     ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        selectionStyle = .none
+
         setupViews()
     }
 
