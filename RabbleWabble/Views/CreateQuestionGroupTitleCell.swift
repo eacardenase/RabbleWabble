@@ -32,13 +32,18 @@ public class CreateQuestionGroupTitleCell: UITableViewCell {
         return label
     }()
 
-    public let titleTextField: UITextField = {
+    public lazy var titleTextField: UITextField = {
         let textField = UITextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .roundedRect
         textField.placeholder = "Title"
         textField.font = .preferredFont(forTextStyle: .body)
+        textField.addTarget(
+            self,
+            action: #selector(titleTextFieldDidChange),
+            for: .editingChanged
+        )
 
         return textField
     }()

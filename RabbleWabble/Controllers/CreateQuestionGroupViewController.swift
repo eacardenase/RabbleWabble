@@ -21,9 +21,16 @@ public protocol CreateQuestionGroupViewControllerDelegate {
 
 public class CreateQuestionGroupViewController: UITableViewController {
 
+    public enum QuestionGroupSections: Int, CaseIterable {
+        case groupTitle
+        case groupQuestions
+        case addNewGroupQuestion
+    }
+
     // MARK: - Properties
 
     public var delegate: CreateQuestionGroupViewControllerDelegate?
+    public let questionGroupBuilder = QuestionGroupBuilder()
 
     // MARK: - View Lifecycle
 
@@ -77,44 +84,16 @@ extension CreateQuestionGroupViewController {
         setupSaveButton()
     }
 
-}
-
-// MARK: - Actions
-
-extension CreateQuestionGroupViewController {
-    @objc func closeButtonTapped(_ sender: Any) {
-        delegate?.createQuestionGroupViewControllerDidCancel(self)
+    private func questionBuilder(for indexPath: IndexPath) -> QuestionBuilder {
+        return questionGroupBuilder.questions[indexPath.row]
     }
 
-    @objc func saveButtonTapped(_ sender: Any) {
-        print(#function)
-    }
-}
+    private func questionBuilder(for cell: CreateQuestionCell)
+        -> QuestionBuilder?
+    {
+        guard let indexPath = tableView.indexPath(for: cell) else { return nil }
 
-// MARK: - UITableViewDataSource
-
-extension CreateQuestionGroupViewController {
-
-    public override func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return 3
-    }
-
-    public override func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        let rowIndex = indexPath.row
-
-        if rowIndex == 0 {
-            return titleCell(from: tableView, for: indexPath)
-        } else if rowIndex == 1 {
-            return questionCell(from: tableView, for: indexPath)
-        } else {
-            return addQuestionGroupCell(from: tableView, for: indexPath)
-        }
+        return questionBuilder(for: indexPath)
     }
 
     private func titleCell(
@@ -133,8 +112,7 @@ extension CreateQuestionGroupViewController {
         }
 
         cell.delegate = self
-
-        // TODO: - Configure the cell
+        cell.titleTextField.text = questionGroupBuilder.title
 
         return cell
     }
@@ -153,9 +131,13 @@ extension CreateQuestionGroupViewController {
             return UITableViewCell()
         }
 
-        cell.delegate = self
+        let questionBuilder = questionBuilder(for: indexPath)
 
-        // TODO: - Configure the cell
+        cell.delegate = self
+        cell.indexLabel.text = "Question \(indexPath.row + 1)"
+        cell.answerTextField.text = questionBuilder.answer
+        cell.hintTextField.text = questionBuilder.hint
+        cell.promptTextField.text = questionBuilder.prompt
 
         return cell
     }
@@ -169,13 +151,107 @@ extension CreateQuestionGroupViewController {
             for: indexPath
         )
     }
+
+    private func displayMissingInputsAlert() {
+        let alert = UIAlertController(
+            title: "Missing Inputs",
+            message: "Please provide all non-optional values",
+            preferredStyle: .alert
+        )
+
+        let okAction = UIAlertAction(title: "Ok", style: .default)
+
+        alert.addAction(okAction)
+
+        present(alert, animated: true)
+    }
+}
+
+// MARK: - Actions
+
+extension CreateQuestionGroupViewController {
+    @objc func closeButtonTapped(_ sender: Any) {
+        delegate?.createQuestionGroupViewControllerDidCancel(self)
+    }
+
+    @objc func saveButtonTapped(_ sender: Any) {
+        do {
+            let questionGroup = try questionGroupBuilder.build()
+
+            delegate?.createQuestionGroupViewController(
+                self,
+                created: questionGroup
+            )
+        } catch {
+            displayMissingInputsAlert()
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension CreateQuestionGroupViewController {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
+        return QuestionGroupSections.allCases.count
+    }
+
+    public override func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        let section = QuestionGroupSections.allCases[section]
+
+        switch section {
+        case .groupTitle:
+            return 1
+        case .groupQuestions:
+            return questionGroupBuilder.questions.count
+        case .addNewGroupQuestion:
+            return 1
+        }
+    }
+
+    public override func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let section = QuestionGroupSections.allCases[indexPath.section]
+
+        switch section {
+        case .groupTitle:
+            return titleCell(from: tableView, for: indexPath)
+        case .groupQuestions:
+            return questionCell(from: tableView, for: indexPath)
+        case .addNewGroupQuestion:
+            return addQuestionGroupCell(from: tableView, for: indexPath)
+        }
+    }
 }
 
 // MARK: - UITableViewDelegate
 
 extension CreateQuestionGroupViewController {
 
-    // TODO: - Add `UITableViewDelegate` methods
+    public override func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        let section = QuestionGroupSections.allCases[indexPath.section]
+        let newQuestionIndex = tableView.numberOfRows(
+            inSection: QuestionGroupSections.groupQuestions.rawValue
+        )
+
+        let newIndexPath = IndexPath(
+            row: newQuestionIndex,
+            section: QuestionGroupSections.groupQuestions.rawValue
+        )
+
+        if case .addNewGroupQuestion = section {
+            questionGroupBuilder.addNewQuestion()
+
+            tableView.insertRows(at: [newIndexPath], with: .top)
+        }
+    }
 
 }
 
@@ -186,21 +262,27 @@ extension CreateQuestionGroupViewController: CreateQuestionCellDelegate {
         _ cell: CreateQuestionCell,
         answerTextDidChange text: String
     ) {
-        // TODO: - Write this
+        guard let questionBuilder = questionBuilder(for: cell) else { return }
+
+        questionBuilder.answer = text
     }
 
     public func createQuestionCell(
         _ cell: CreateQuestionCell,
         hintTextDidChange text: String
     ) {
-        // TODO: - Write this
+        guard let questionBuilder = questionBuilder(for: cell) else { return }
+
+        questionBuilder.hint = text
     }
 
     public func createQuestionCell(
         _ cell: CreateQuestionCell,
         promptTextDidChange text: String
     ) {
-        // TODO: - Write this
+        guard let questionBuilder = questionBuilder(for: cell) else { return }
+
+        questionBuilder.prompt = text
     }
 }
 
@@ -213,6 +295,6 @@ extension CreateQuestionGroupViewController:
         _ cell: CreateQuestionGroupTitleCell,
         titleTextDidChange text: String
     ) {
-        // TODO: - Write this
+        questionGroupBuilder.title = text
     }
 }

@@ -74,7 +74,7 @@ public class QuestionGroup: Codable {
 
     // MARK: - Object Lifecycle
 
-    public init(questions: [Question], score: Score, title: String) {
+    public init(questions: [Question], score: Score = Score(), title: String) {
         self.questions = questions
         self.score = score
         self.title = title

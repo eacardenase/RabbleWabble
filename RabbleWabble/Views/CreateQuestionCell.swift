@@ -42,19 +42,24 @@ public class CreateQuestionCell: UITableViewCell {
         return label
     }()
 
-    public var promptTextField: UITextField = {
-        let textField = UITextField()
+    public lazy var promptTextField: JapaneseTextField = {
+        let textField = JapaneseTextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Answer"
+        textField.placeholder = "Prompt"
         textField.font = .systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         textField.font = .preferredFont(forTextStyle: .body)
+        textField.addTarget(
+            self,
+            action: #selector(promptTextFieldDidChange),
+            for: .editingChanged
+        )
 
         return textField
     }()
 
-    public var hintTextField: UITextField = {
+    public lazy var hintTextField: UITextField = {
         let textField = UITextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -62,18 +67,28 @@ public class CreateQuestionCell: UITableViewCell {
         textField.font = .systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         textField.font = .preferredFont(forTextStyle: .body)
+        textField.addTarget(
+            self,
+            action: #selector(hintTextFieldDidChange),
+            for: .editingChanged
+        )
 
         return textField
     }()
 
-    public var answerTextField: UITextField = {
+    public lazy var answerTextField: UITextField = {
         let textField = UITextField()
 
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Prompt"
+        textField.placeholder = "Answer"
         textField.font = .systemFont(ofSize: 14)
         textField.borderStyle = .roundedRect
         textField.font = .preferredFont(forTextStyle: .body)
+        textField.addTarget(
+            self,
+            action: #selector(answerTextFieldDidChange),
+            for: .editingChanged
+        )
 
         return textField
     }()
@@ -137,21 +152,26 @@ extension CreateQuestionCell {
 // MARK: - Actions
 extension CreateQuestionCell {
     @objc public func answerTextFieldDidChange(_ textField: UITextField) {
-        delegate?.createQuestionCell(self, answerTextDidChange: textField.text!)
+        guard let text = textField.text else { return }
+
+        delegate?.createQuestionCell(self, answerTextDidChange: text)
     }
 
     @objc public func hintTextFieldDidChange(_ textField: UITextField) {
-        delegate?.createQuestionCell(self, hintTextDidChange: textField.text!)
+        guard let text = textField.text else { return }
+
+        delegate?.createQuestionCell(self, hintTextDidChange: text)
     }
 
     @objc public func promptTextFieldDidChange(_ textField: UITextField) {
-        delegate?.createQuestionCell(self, promptTextDidChange: textField.text!)
+        guard let text = textField.text else { return }
+
+        delegate?.createQuestionCell(self, promptTextDidChange: text)
     }
 }
 
 // MARK: - UITextFieldDelegate
 extension CreateQuestionCell: UITextFieldDelegate {
-
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return false
